@@ -3,6 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Give your OCD a rest
+*.DS_Store
+
+# Notebook related
+*.ipynb
+
 # C extensions
 *.so
 

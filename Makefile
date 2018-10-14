@@ -37,7 +37,7 @@ test-coverage:
 	coverage report -m --omit $(OMIT_PATTERNS)
 
 lint-flake8:
-	flake8 . --ignore D203 --exclude games/api/migrations
+	flake8 . --ignore D203 --exclude games/api/migrations --exclude games/hotdice/migrations
 
 format:
 	black games
