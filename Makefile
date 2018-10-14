@@ -3,7 +3,7 @@ PYTHON		= $(shell which python)
 
 TOPDIR = $(shell pwd)
 DIRS	= test bin locale src
-PYDIRS	= hotdice
+PYDIRS	= games
 
 BINDIR  = bin
 
@@ -30,41 +30,41 @@ install: build
 	$(PYTHON) setup.py install -f
 
 test:
-	$(PYTHON) hotdice/manage.py test -v 2 hotdice/
+	$(PYTHON) games/manage.py test -v 2 games/
 
 test-coverage:
-	coverage run --source=hotdice/,qpc/ hotdice/manage.py test -v 2 hotdice/ qpc/
+	coverage run --source=games/,qpc/ games/manage.py test -v 2 games/ qpc/
 	coverage report -m --omit $(OMIT_PATTERNS)
 
 lint-flake8:
-	flake8 . --ignore D203 --exclude hotdice/api/migrations,docs,build,.vscode,client,venv,deploy
+	flake8 . --ignore D203 --exclude games/api/migrations,docs,build,.vscode,client,venv,deploy
 
 lint-pylint:
 	find . -name "*.py" -not -name "*0*.py" -not -path "./build/*" -not -path "./docs/*" -not -path "./.vscode/*" -not -path "./client/*" -not -path "./venv/*" -not -path "./deploy/*" | xargs $(PYTHON) -m pylint --load-plugins=pylint_django --disable=duplicate-code
 
 format:
-	black hotdice
+	black games
 
 lint: format lint-flake8 lint-pylint
 
 server-makemigrations:
-	$(PYTHON) hotdice/manage.py makemigrations --settings hotdice.settings
+	$(PYTHON) games/manage.py makemigrations --settings games.settings
 
 server-migrate:
-	$(PYTHON) hotdice/manage.py migrate --settings hotdice.settings -v 3
+	$(PYTHON) games/manage.py migrate --settings games.settings -v 3
 
 server-set-superuser:
-	echo "from django.contrib.auth.models import User; admin_not_present = User.objects.filter(email='admin@example.com').count() == 0;User.objects.create_superuser('admin', 'admin@example.com', 'pass') if admin_not_present else print('admin present');print(User.objects.filter(email='admin@example.com'))" | $(PYTHON) hotdice/manage.py shell --settings hotdice.settings -v 3
+	echo "from django.contrib.auth.models import User; admin_not_present = User.objects.filter(email='admin@example.com').count() == 0;User.objects.create_superuser('admin', 'admin@example.com', 'pass') if admin_not_present else print('admin present');print(User.objects.filter(email='admin@example.com'))" | $(PYTHON) games/manage.py shell --settings games.settings -v 3
 
 server-init: server-makemigrations server-migrate server-set-superuser
 
 clean:
-	rm -rf hotdice.egg-info
+	rm -rf games.egg-info
 	PYCLEAN_PLACES=${PYCLEAN_PLACES:-'.'}
 	find ${PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
 	find ${PYCLEAN_PLACES} -type d -name "__pycache__" -delete
 
 serve:
-	$(PYTHON) hotdice/manage.py runserver
+	$(PYTHON) games/manage.py runserver
 
 .PHONY: clean lint format lint-flak8 lint-pylint serve server-init all install test test-coverage
