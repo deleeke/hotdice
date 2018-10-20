@@ -48,7 +48,7 @@ format:
 lint: format lint-flake8 lint-pylint
 
 server-makemigrations:
-	$(PYTHON) games/manage.py makemigrations --settings games.settings
+	$(PYTHON) games/manage.py makemigrations hotdice --settings games.settings
 
 server-migrate:
 	$(PYTHON) games/manage.py migrate --settings games.settings -v 3
@@ -60,6 +60,7 @@ server-init: server-makemigrations server-migrate server-set-superuser
 
 clean:
 	rm -rf games.egg-info
+	rm -rf games/db.sqlite3
 	PYCLEAN_PLACES=${PYCLEAN_PLACES:-'.'}
 	find ${PYCLEAN_PLACES} -type f -name "*.py[co]" -delete
 	find ${PYCLEAN_PLACES} -type d -name "__pycache__" -delete

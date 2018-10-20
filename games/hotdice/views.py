@@ -1,6 +1,8 @@
-from django.shortcuts import render
 from django.http import HttpResponse
-# Create your views here.
+
+from .models import HotDiceHand
+
 
 def index(request):
-    return HttpResponse("Hello, world. This is the hotdice app.")
+    hands = HotDiceHand.objects.order_by("-score")
+    return HttpResponse(hands)
