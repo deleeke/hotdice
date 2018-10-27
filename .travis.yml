@@ -1,0 +1,15 @@
+cache: pip
+language: python
+sudo: false
+python:
+    - '3.6'
+    - '3.7-dev'
+# command to install dependencies
+install:
+  - make install-dev
+# command to run tests
+script:
+  # Make sure code meets formatting standards
+  - make lint
+  # Make sure migrations can run on empty db
+  - make server-init

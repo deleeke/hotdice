@@ -26,8 +26,8 @@ help:
 
 all: lint test-coverage
 
-install: build
-	$(PYTHON) setup.py install -f
+install-dev:
+	pip install -e.
 
 test:
 	$(PYTHON) games/manage.py test -v 2 games/
@@ -37,15 +37,12 @@ test-coverage:
 	coverage report -m --omit $(OMIT_PATTERNS)
 
 lint-flake8:
-	flake8 . --ignore D203 --exclude games/api/migrations,docs,build,.vscode,client,venv,deploy
-
-lint-pylint:
-	find . -name "*.py" -not -name "*0*.py" -not -path "./build/*" -not -path "./docs/*" -not -path "./.vscode/*" -not -path "./client/*" -not -path "./venv/*" -not -path "./deploy/*" | xargs $(PYTHON) -m pylint --load-plugins=pylint_django --disable=duplicate-code
+	flake8 . --ignore D203 --exclude games/api/migrations
 
 format:
 	black games
 
-lint: format lint-flake8 lint-pylint
+lint: lint-flake8
 
 server-makemigrations:
 	$(PYTHON) games/manage.py makemigrations --settings games.settings
